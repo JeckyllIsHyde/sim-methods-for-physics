@@ -1,0 +1,32 @@
+/* 
+   Solucion de una ecuacion valores de frontera  por el método
+   de la lanzadera (shooting method), utilizando RK4
+*/
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+const double ERR = 1e-7;
+
+double f1(double x1, double x2, double t) { return x2; }
+double f2(double Omega0, double x1, double x2, double t) { return -Omega0*Omega0*x1;}
+double fExacta(double t) { return sin(t);}
+
+void UnPasoDeRK4_2doOrden(double w0, double &x1, double &x2, double &t, double dt) {
+  double dx11,dx21,dx31,dx41,                        dx12,dx22,dx32,dx42;
+  dx11 = dt*f1(x1,x2,t);                             dx12 = dt*f2(w0, x1,x2,t);
+  dx21 = dt*f1(x1+0.5*dx11,x2+0.5*dx12, t+0.5*dt);   dx22 = dt*f2(w0, x1+0.5*dx11,x2+0.5*dx12, t+0.5*dt);
+  dx31 = dt*f1(x1+0.5*dx21,x2+0.5*dx22, t+0.5*dt);   dx32 = dt*f2(w0, x1+0.5*dx21,x2+0.5*dx22, t+0.5*dt);
+  dx41 = dt*f1(x1+dx31,x2+dx32, t+dt);               dx42 = dt*f2(w0, x1+dx31,x2+dx32, t+dt);
+  t+=dt;
+  x1+=((dx11+2*dx21+2*dx31+dx41)/6);                 x2+=((dx12+2*dx22+2*dx32+dx42)/6);
+}
+
+double f(double w0) {
+  double x1=1, x2=1, t=0, dt=0.01;
+  for (t=0;t<1; ) {
+    UnPasoDeRK4_2doOrden(w0,x1,x2,t,dt);
+  }
+  return x1;
+}
