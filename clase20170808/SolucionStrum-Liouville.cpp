@@ -30,3 +30,24 @@ double f(double w0) {
   }
   return x1;
 }
+
+double ceroPorBiseccion(double a, double b) {
+  double m, fa, fb, fm;
+  fa = f(a); fb = f(b);
+  do {
+    m = (a+b)/2; fm = f(m);
+    if (fa*fm<0)
+      {b=m;fb = fm;}
+    else
+      {a=m;fa = fa;}
+  } while (b-a > ERR);
+
+  return (a+b)/2;
+}
+
+int main(void) {
+  double w0;
+  for (w0=0.1;w0<20; w0+=0.1)
+    cout << f(w0) << endl;
+  return 0;
+}
