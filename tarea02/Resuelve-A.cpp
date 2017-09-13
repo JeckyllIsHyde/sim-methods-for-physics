@@ -19,6 +19,79 @@ const double Xi = -0.06626458266981849;
 class Cuerpo;
 class Colisionador;
 
+class Cuerpo {
+ private:
+  vector3D r,v,F;
+  double m,R;
+ public:
+  friend class Colisionador;
+  void Inicio(double x0,double y0,double z0,
+	      double Vx0,double Vy0,double Vz0,
+	      double m0,double R0);
+  void BorreFuerza(void);
+  void AgregueFuerza(vector3D F0);
+  void Mueva_r(double dt, double Constante);
+  void Mueva_v(double dt, double Constante);
+  void Dibujese(void);
+  double Getx(void) {return r.x();};
+  double Gety(void) {return r.y();};
+};
+
+void Cuerpo::Inicio(double x0,double y0,double z0,
+		    double Vx0,double Vy0,double Vz0,
+		    double m0,double R0) {
+  r.cargue(x0,y0,z0);
+  v.cargue(Vx0,Vy0,Vz0);
+  m = m0; R = R0;
+}
+
+void Cuerpo::BorreFuerza(void) {
+  F.cargue(0.0,0.0,0.0);
+}
+				  
+void Cuerpo::AgregueFuerza(vector3D F0) {
+  F+=F0;
+}
+
+void Cuerpo::Mueva_r(double dt, double Constante) {
+  r+=v*(Constante*dt);
+}
+
+void Cuerpo::Mueva_v(double dt, double Constante) {
+  v+=F*(Constante*dt/m);
+}
+
+void Cuerpo::Dibujese(void) {
+  cout << ", " << r.x() << "+"<< R << "*cos(t)," << r.y() << "+" << R << "*sin(t)";
+}
+
+class Colisionador {
+private:
+  
+public:
+  void CalculeTodasLasFuerzas(Cuerpo* cuerpos);
+  void CalculeLaFuerzaEntre(Cuerpo& cuerpo1, Cuerpo& cuerpo2);
+};
+
+void Colisionador::CalculeTodasLasFuerzas(Cuerpo* cuerpos) {
+  int i,j;
+  for(i=0;i<N;i++)
+    cuerpos[i].BorreFuerza();
+  for(i=0;i<N;i++)
+    for(j=i+1;j<N;j++)
+      CalculeLaFuerzaEntre(cuerpos[i],cuerpos[j]);
+}
+
+void Colisionador::CalculeLaFuerzaEntre(Cuerpo& cuerpo1,
+					Cuerpo& cuerpo2) {
+  vector3D F,dr;
+  dr= cuerpo2.r-cuerpo1.r;
+  double aux = G*cuerpo1.m*cuerpo2.m*pow(norma2(dr),-1.5);
+  F = dr*aux;
+  cuerpo1.AgregueFuerza(F);
+  cuerpo2.AgregueFuerza(F*(-1.0));
+}
+
 void InicieAnimacion(void) {
   cout << "set terminal gif animate" << endl; 
   cout << "set output 'SolYJupiter.gif'" << endl; 
