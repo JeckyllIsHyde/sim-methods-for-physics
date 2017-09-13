@@ -33,7 +33,6 @@ class Cuerpo {
   void AgregueFuerza(vector3D F0);
   void Mueva_r(double dt, double Constante);
   void Mueva_v(double dt, double Constante);
-  void Dibujese(void);
   void DibujeseRelativaA(double x0, double y0);
   double Getx(void) {return r.x();};
   double Gety(void) {return r.y();};
@@ -61,10 +60,6 @@ void Cuerpo::Mueva_r(double dt, double Constante) {
 
 void Cuerpo::Mueva_v(double dt, double Constante) {
   v+=F*(Constante*dt/m);
-}
-
-void Cuerpo::Dibujese(void) {
-  cout << ", " << r.x() << "+"<< R << "*cos(t)," << r.y() << "+" << R << "*sin(t)";
 }
 
 void Cuerpo::DibujeseRelativaA(double x0, double y0) {
