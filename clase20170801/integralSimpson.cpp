@@ -3,6 +3,8 @@
 
 using namespace std;
 
+const double ERR = 1e-7;
+
 double f(double alfa, double x, double t) {
   return cos(alfa*t-x*sin(t));
 }
