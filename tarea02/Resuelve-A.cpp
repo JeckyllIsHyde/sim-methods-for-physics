@@ -131,21 +131,21 @@ int main(void) {
 
   dt = 20*T/(370); // M*T = n*dt
   
-  //InicieAnimacion(); Ndibujos=500;
+  InicieAnimacion(); Ndibujos=500;
   //                ( x0, y0, z0,Vx0,Vy0,Vz0, m0, R0 )
   planetas[0].Inicio( x0,0.0,0.0,0.0,vy0,0.0, m0, R0 );
   planetas[1].Inicio( x1,0.0,0.0,0.0,vy1,0.0, m1, R1 );
   
   for (t=tdibujo=0;t<tmax;t+=dt,tdibujo+=dt) {
-    /*if (tdibujo>tmax/Ndibujos) {
+    if (tdibujo>tmax/Ndibujos) {
       InicioCuadro();
       for (i=0;i<N;i++)
 	planetas[i].Dibujese();
       TermineCuadro();
       tdibujo = 0;
-    }*/
-    cout << planetas[0].Getx() << " " << planetas[0].Gety()
-	 << planetas[0].Getx() << " " << planetas[0].Gety() << endl;
+    }
+    // cout << planetas[0].Getx() << " " << planetas[0].Gety()
+    //	 << planetas[0].Getx() << " " << planetas[0].Gety() << endl;
     // Muevase con Omelyan PEFRL
     for (i=0;i<N;i++) planetas[i].Mueva_r(dt,Zeta);
     newton.CalculeTodasLasFuerzas(planetas); for (i=0;i<N;i++) planetas[i].Mueva_v(dt,(1-2*Lambda)/2);
