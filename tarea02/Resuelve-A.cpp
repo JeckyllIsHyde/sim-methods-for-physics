@@ -1,5 +1,6 @@
 /*
   Se toma la masa de Jupiter como 1newKg y la del sol como 1047newKg
+  La distancia entre ambos es 1000 newm. 
  */
 
 #include <iostream>
@@ -143,6 +144,11 @@ int main(void) {
   
   for (t=tdibujo=0;t<tmax;t+=dt,tdibujo+=dt) {
     if (tdibujo>tmax/Ndibujos) {
+      cout << " set grid "
+	   << " set title '" << (int)(t/T)+0
+	   << ". T = " << T
+	   << "[newS] , t = " << t
+	   << ", dt = " << dt << "' " << std::endl;
       InicioCuadro();
       for (i=0;i<N;i++)
 	planetas[i].DibujeseRelativaA( (m0*planetas[0].Getx()+m1*planetas[1].Getx())/M, 
