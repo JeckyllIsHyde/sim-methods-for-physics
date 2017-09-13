@@ -22,6 +22,24 @@ double IntegralPorSimpson(double alfa, double x, double a, double b, double N) {
   return suma*h/3;
 }
 
+double Bessel(double alfa, double x) {
+  return IntegralPorSimpson(alfa,x,0,M_PI,50)/M_PI;
+}
+
+double ceroPorBiseccion(double alfa, double a, double b) {
+  double m, fa, fb, fm;
+  fa = Bessel(alfa,a); fb = Bessel(alfa,b);
+  do {
+    m = (a+b)/2; fm = Bessel(alfa,m);
+    if (fa*fm<0)
+      {b=m;fb = fm;}
+    else
+      {a=m;fa = fa;}
+  } while (b-a > ERR);
+
+  return (a+b)/2;
+}
+
 int main(void) {
 
   double a, b, alfa=0;
