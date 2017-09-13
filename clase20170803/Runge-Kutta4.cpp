@@ -1,3 +1,9 @@
+/* 
+
+ Runge-Kutta4.cpp : output are three columns [t,f,f_exacta]
+
+ */
+
 #include <iostream>
 #include <cmath>
 
