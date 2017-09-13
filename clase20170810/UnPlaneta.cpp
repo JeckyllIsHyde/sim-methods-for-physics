@@ -57,3 +57,69 @@ void InicioCuadro(void) {
 void TermineCuadro(void) {
   cout << endl;
 }
+
+void InicieAnimacion(void) {
+  cout << "set terminal gif animate" << endl; 
+  cout << "set output 'MiPlaneta.gif'" << endl; 
+  cout << "unset key" << endl;
+  cout << "set xrange [-120:120]" << endl;
+  cout << "set yrange [-120:120]" << endl;
+  cout << "set size ratio -1" << endl;
+  cout << "set parametric" << endl;
+  cout << "set trange [0:7]" << endl;
+  cout << "set isosamples 12" << endl;
+}
+
+void InicioCuadro(void) {
+  cout << "plot 0,0 ";
+}
+
+void TermineCuadro(void) {
+  cout << endl;
+}
+void InicieAnimacion(void) {
+  cout << "set terminal gif animate" << endl; 
+  cout << "set output 'MiPlaneta.gif'" << endl; 
+  cout << "unset key" << endl;
+  cout << "set xrange [-120:120]" << endl;
+  cout << "set yrange [-120:120]" << endl;
+  cout << "set size ratio -1" << endl;
+  cout << "set parametric" << endl;
+  cout << "set trange [0:7]" << endl;
+  cout << "set isosamples 12" << endl;
+}
+
+void InicioCuadro(void) {
+  cout << "plot 0,0 ";
+}
+
+void TermineCuadro(void) {
+  cout << endl;
+}
+
+int main(void) {
+  double t, tmax, dt=0.01;
+  double tdibujo; int Ndibujos;
+  double m=1, R=5;
+  double r=100, omega=sqrt(GM/(r*r*r)), v=omega*r, T=2*M_PI/omega; tmax=1.1*T;
+  Cuerpo planeta;
+
+
+  InicieAnimacion(); Ndibujos=500;
+  //          ( x0, y0,Vx0,Vy0,   m0,  R0)
+  planeta.Inicio(r,0.0,0.0,0.5*v,m,R);
+  
+  for (t=tdibujo=0;t<tmax;t+=dt,tdibujo+=dt) {
+    if (tdibujo>tmax/Ndibujos) {
+      InicioCuadro();
+      planeta.Dibujese();
+      TermineCuadro();
+      tdibujo = 0;
+    }
+    // cout<<planeta.Getx() <<" " << planeta.Gety() << endl;
+    planeta.CalculeFuerza();
+    planeta.Muevase(dt);
+  }
+  
+  return 0;
+}
