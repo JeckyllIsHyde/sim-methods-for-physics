@@ -1,3 +1,12 @@
+/*
+
+  integralSimson.cpp : 
+  Is an example of how to find zeros in bessel functions, the 
+  bessel function is calculated with Simpson's Rule. Zeros are
+  found by bisections.
+
+ */
+
 #include <iostream>
 #include <cmath>
 
