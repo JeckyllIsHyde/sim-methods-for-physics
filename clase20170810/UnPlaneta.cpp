@@ -38,3 +38,22 @@ void Cuerpo::Dibujese(void) const {
   cout << ", " << x << "+"<< R << "*cos(t)," << y << "+" << R << "*sin(t)";
 }
 
+void InicieAnimacion(void) {
+  cout << "set terminal gif animate" << endl; 
+  cout << "set output 'MiPlaneta.gif'" << endl; 
+  cout << "unset key" << endl;
+  cout << "set xrange [-120:120]" << endl;
+  cout << "set yrange [-120:120]" << endl;
+  cout << "set size ratio -1" << endl;
+  cout << "set parametric" << endl;
+  cout << "set trange [0:7]" << endl;
+  cout << "set isosamples 12" << endl;
+}
+
+void InicioCuadro(void) {
+  cout << "plot 0,0 ";
+}
+
+void TermineCuadro(void) {
+  cout << endl;
+}
