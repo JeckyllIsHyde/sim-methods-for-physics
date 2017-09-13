@@ -144,11 +144,11 @@ int main(void) {
   
   for (t=tdibujo=0;t<tmax;t+=dt,tdibujo+=dt) {
     if (tdibujo>tmax/Ndibujos) {
-      cout << " set grid "
+      cout << " set grid " << endl
 	   << " set title '" << (int)(t/T)+0
 	   << ". T = " << T
 	   << "[newS] , t = " << t
-	   << ", dt = " << dt << "' " << std::endl;
+	   << ", dt = " << dt << "' " << endl;
       InicioCuadro();
       for (i=0;i<N;i++)
 	planetas[i].DibujeseRelativaA( (m0*planetas[0].Getx()+m1*planetas[1].Getx())/M, 
