@@ -33,6 +33,7 @@ class Cuerpo {
   void Mueva_r(double dt, double Constante);
   void Mueva_v(double dt, double Constante);
   void Dibujese(void);
+  void DibujeseRelativaA(double x0, double y0);
   double Getx(void) {return r.x();};
   double Gety(void) {return r.y();};
 };
@@ -63,6 +64,10 @@ void Cuerpo::Mueva_v(double dt, double Constante) {
 
 void Cuerpo::Dibujese(void) {
   cout << ", " << r.x() << "+"<< R << "*cos(t)," << r.y() << "+" << R << "*sin(t)";
+}
+
+void Cuerpo::DibujeseRelativaA(double x0, double y0) {
+  cout << ", " << r.x()-x0 << "+"<< R << "*cos(t)," << r.y()-y0 << "+" << R << "*sin(t)";
 }
 
 class Colisionador {
@@ -140,7 +145,8 @@ int main(void) {
     if (tdibujo>tmax/Ndibujos) {
       InicioCuadro();
       for (i=0;i<N;i++)
-	planetas[i].Dibujese();
+	planetas[i].DibujeseRelativaA( (m0*planetas[0].Getx()+m1*planetas[1].Getx())/M, 
+                                       (m0*planetas[0].Gety()+m0*planetas[0].Gety())/M );
       TermineCuadro();
       tdibujo = 0;
     }
