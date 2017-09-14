@@ -8,15 +8,16 @@ using namespace std;
 
 const double K = 1.e4;
 const double g = 9.8;
+const double Gamma = 50;
 const double Lx = 100.0, Ly = 100.0;
-const int Nx = 7; int Ny = 8;
+const int Nx = 1; int Ny = 1;
 const int N = Nx*Ny;
 
 const double Zeta = +0.1786178958448091;
 const double Lambda = -0.2123418310626054;
 const double Xi = -0.06626458266981849;
 
-const double ERFF = 1.e-8
+const double ERFF = 1.e-8;
 
 class Cuerpo;
 class Colisionador;
@@ -89,8 +90,8 @@ void Colisionador::CalculeTodasLasFuerzas(Cuerpo* cuerpos) {
 
 void Colisionador::CalculeLaFuerzaEntre(Cuerpo& cuerpo1,
 					Cuerpo& cuerpo2) {
-  vector3D Fn, r21, n, t, vc, vcn, vct;
-  double d21, s, m1, m2, m12, R1, R2, vcn_n, vct_t;
+  vector3D F2, Fn, r21, n, t, vc, vcn, vct;
+  double d21, s, m1, m2, m12, R1, R2, vcn_n, vct_t, Fn_n;
   r21= cuerpo2.r-cuerpo1.r;
   d21 = norma(r21);
   s = (cuerpo1.R+cuerpo2.R)-d21;
@@ -110,12 +111,14 @@ void Colisionador::CalculeLaFuerzaEntre(Cuerpo& cuerpo1,
 
     // fuerzas normales
     // fuerza de Hetz
-    Fn = n*K*pow(s,1.5);
+    Fn_n = K*pow(s,1.5);
     // disipacion plastica
-    Fn-= m12*sqrt(s)*gamma*vcn;
-    if (Fn*n<0)
-      Fn.cargue(0,0,0);
-    
+    Fn_n-= m12*sqrt(s)*Gamma*vcn_n;
+    if (Fn_n<0)
+      Fn_n = 0;
+    Fn = n*Fn_n;
+
+    F2 = Fn;
     cuerpo2.AgregueFuerza(F2);
     cuerpo1.AgregueFuerza(F2*(-1.0));
   }
@@ -154,7 +157,7 @@ int main(void) {
   Colisionador newton;
   Crandom ran64(1); double theta;
 
-  double m0=1, R0=3, v=10;
+  double m0=1, R0=6, v=10;
   double Rpared=10000, Mpared=1000*m0 ;
 
   double T=Lx/v, tmax=5*T;
