@@ -10,11 +10,9 @@ const double g = 9.8;
 const double K = 1.e4;
 const double Gamma = 50, Kcundall = 10, MU = 0.4;
 const double Lx = 100.0, Ly = 100.0;
-// const int Nx = 1; int Ny = 1;
-// const int N = Nx*Ny;
-#define Nx 1
-#define Ny 1
-#define N Nx*Ny
+
+const int Nx = 1, Ny = 1;
+const int N = Nx*Ny;
 
 const double Zeta = +0.1786178958448091;
 const double Lambda = -0.2123418310626054;
@@ -26,10 +24,10 @@ class Cuerpo;
 class Colisionador;
 
 class Cuerpo {
- private:
+private:
   vector3D r,v,F,w,tau;
   double m,R,th,I;
- public:
+public:
   friend class Colisionador;
   void Inicio(double  x0, double y0, double z0,
 	      double Vx0, double Vy0, double Vz0,
@@ -84,8 +82,7 @@ void Cuerpo::Dibujese(void) {
 
 class Colisionador {
 private:
-  vector3D L[N+4][N+4];
-  bool EnColision[N+4][N+4];
+  vector3D L[N+4][N+4];  bool EnColision[N+4][N+4];
 public:
   void Inicie(void);
   void CalculeTodasLasFuerzas(Cuerpo* cuerpos, double dt);
@@ -199,14 +196,14 @@ int main(void) {
   double tdibujo; int Ndibujos;
   Cuerpo granos[N+4];
   int i,j;
-  Colisionador newton; newton.Inicie();
+  Colisionador newton; //newton.Inicie();
   Crandom ran64(1); double theta;
 
   double m0=1, R0=6, v=10, w = 10;
   double Rpared=10000, Mpared=1000*m0 ;
 
   double T=Lx/v, tmax=2*T;
-  
+
   InicieAnimacion(); Ndibujos=2000;
   //                (  x0,       y0, z0,Vx0,Vy0,Vz0,th0,W0,     m0,     R0 )
   // pared arriba
@@ -247,6 +244,6 @@ int main(void) {
     newton.CalculeTodasLasFuerzas(granos, dt); for (i=0;i<N;i++) granos[i].Mueva_v(dt,(1-2*Lambda)/2);
     for (i=0;i<N;i++) granos[i].Mueva_r(dt,Zeta);
   }
-  
+
   return 0;
 }
