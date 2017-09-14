@@ -94,15 +94,15 @@ void Colisionador::CalculeLaFuerzaEntre(Cuerpo& cuerpo1,
 }
 
 void InicieAnimacion(void) {
-  cout << "set terminal gif animate" << endl; 
-  cout << "set output 'SolYJupiter.gif'" << endl; 
+  cout << "set terminal pngcairo" << endl; 
+  cout << "set output 'SolYJupiter.png'" << endl; 
   cout << "unset key" << endl;
   cout << "set xrange [-1200:1200]" << endl;
   cout << "set yrange [-1200:1200]" << endl;
   cout << "set size ratio -1" << endl;
   cout << "set parametric" << endl;
   cout << "set trange [0:7]" << endl;
-  cout << "set isosamples 12" << endl;
+  //  cout << "set isosamples 12" << endl;
 }
 
 void InicioCuadro(void) {
@@ -130,25 +130,25 @@ int main(void) {
     vy0=omega*x0, vy1=1.0*omega*x1,
     T=2*M_PI/omega, tmax=20.*T;
 
-  dt = 20*T/(370); // M*T = n*dt
+  dt = 20*T/(150); // M*T = n*dt
   
   InicieAnimacion(); Ndibujos=500;
   //                ( x0, y0, z0,Vx0,Vy0,Vz0, m0, R0 )
   planetas[0].Inicio( x0,0.0,0.0,0.0,vy0,0.0, m0, R0 );
   planetas[1].Inicio( x1,0.0,0.0,0.0,vy1,0.0, m1, R1 );
-  
+   
+  cout << " set grid back ls 12 " << endl
+       << " set title 'T = " << T
+       << "[newS] , dt = " << dt << "' " << endl;
+  InicioCuadro();
   for (t=tdibujo=0;t<tmax;t+=dt,tdibujo+=dt) {
     if (tdibujo>tmax/Ndibujos) {
-      cout << " set grid " << endl
-	   << " set title '" << (int)(t/T)+0
-	   << ". T = " << T
-	   << "[newS] , t = " << t
-	   << ", dt = " << dt << "' " << endl;
-      InicioCuadro();
-      for (i=0;i<N;i++)
-	planetas[i].DibujeseRelativaA( (m0*planetas[0].Getx()+m1*planetas[1].Getx())/M, 
-                                       (m0*planetas[0].Gety()+m0*planetas[0].Gety())/M );
-      TermineCuadro();
+      planetas[0].DibujeseRelativaA( (m0*planetas[0].Getx()+m1*planetas[1].Getx())/M, 
+				     (m0*planetas[0].Gety()+m0*planetas[0].Gety())/M );
+      cout << " lc rgb 'red' ";
+      planetas[1].DibujeseRelativaA( (m0*planetas[0].Getx()+m1*planetas[1].Getx())/M, 
+				     (m0*planetas[0].Gety()+m0*planetas[0].Gety())/M );
+      cout << " lc rgb 'blue' ";
       tdibujo = 0;
     }
     // cout << planetas[0].Getx() << " " << planetas[0].Gety()
@@ -164,6 +164,7 @@ int main(void) {
     newton.CalculeTodasLasFuerzas(planetas); for (i=0;i<N;i++) planetas[i].Mueva_v(dt,(1-2*Lambda)/2);
     for (i=0;i<N;i++) planetas[i].Mueva_r(dt,Zeta);
   }
+  TermineCuadro();
 
   return 0;
 }
