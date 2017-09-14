@@ -25,11 +25,12 @@ class Colisionador;
 class Cuerpo {
  private:
   vector3D r,v,F;
-  double m,R;
+  double m,R,th,w;
  public:
   friend class Colisionador;
-  void Inicio(double x0,double y0,double z0,
-	      double Vx0,double Vy0,double Vz0,
+  void Inicio(double  x0, double y0, double z0,
+	      double Vx0, double Vy0, double Vz0,
+	      double th0, double w0,
 	      double m0,double R0);
   void BorreFuerza(void);
   void AgregueFuerza(vector3D F0);
@@ -42,10 +43,11 @@ class Cuerpo {
 
 void Cuerpo::Inicio(double x0,double y0,double z0,
 		    double Vx0,double Vy0,double Vz0,
+		    double th0, double w0,
 		    double m0,double R0) {
   r.cargue(x0,y0,z0);
   v.cargue(Vx0,Vy0,Vz0);
-  m = m0; R = R0;
+  m = m0; R = R0; th = th0; w = w0;
 }
 
 void Cuerpo::BorreFuerza(void) {
@@ -163,21 +165,24 @@ int main(void) {
   double T=Lx/v, tmax=5*T;
   
   InicieAnimacion(); Ndibujos=500;
-  //                ( x0, y0, z0,Vx0,Vy0,Vz0, m0, R0 )
+  //                (  x0,       y0, z0,Vx0,Vy0,Vz0,th0,W0,     m0,     R0 )
   // pared arriba
-  granos[N+0].Inicio(Lx/2,Ly+Rpared,0.0,0.0,0.0,0.0, Mpared, Rpared );
+  granos[N+0].Inicio(Lx/2,Ly+Rpared,0.0,0.0,0.0,0.0,  0, 0, Mpared, Rpared );
   // pared abajo
-  granos[N+1].Inicio(Lx/2,  -Rpared,0.0,0.0,0.0,0.0, Mpared, Rpared );
+  granos[N+1].Inicio(Lx/2,  -Rpared,0.0,0.0,0.0,0.0,  0, 0, Mpared, Rpared );
   // pared derercha
-  granos[N+2].Inicio(Lx+Rpared,Ly/2,0.0,0.0,0.0,0.0, Mpared, Rpared );
+  granos[N+2].Inicio(Lx+Rpared,Ly/2,0.0,0.0,0.0,0.0,  0, 0,  Mpared, Rpared );
   // pared izquierda
-  granos[N+3].Inicio(  -Rpared,Ly/2,0.0,0.0,0.0,0.0, Mpared, Rpared );
+  granos[N+3].Inicio(  -Rpared,Ly/2,0.0,0.0,0.0,0.0,  0, 0,  Mpared, Rpared );
 
   double  row, col;
   for (i=0; i<N; i++) {
     row = (int)i/(int)Nx; col = i-row*Nx;
     theta = 2*M_PI*ran64.r();
-    granos[i].Inicio((1+col)*Lx/(Nx+2),(1+row)*Ly/(Ny+2),0.0,v*cos(theta),v*sin(theta),0.0, m0, R0 );
+    granos[i].Inicio((1+col)*Lx/(Nx+2),(1+row)*Ly/(Ny+2),0.0,
+		     v*cos(theta),v*sin(theta),0.0,
+		     0, 0,
+		     m0, R0 );
   }
 
   for (t=tdibujo=0;t<tmax;t+=dt,tdibujo+=dt) {
