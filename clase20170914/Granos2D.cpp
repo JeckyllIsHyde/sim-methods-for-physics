@@ -67,7 +67,8 @@ void Cuerpo::Mueva_v(double dt, double Constante) {
 }
 
 void Cuerpo::Dibujese(void) {
-  cout << ", " << r.x() << "+"<< R << "*cos(t)," << r.y() << "+" << R << "*sin(t) ";
+  cout << ", " << r.x() << "+"<< R << "*cos(t)," << r.y() << "+" << R << "*sin(t), "
+       << r.x() << "+" << R*cos(th)/7.0 << "*t, " << r.y() << "+" << R*sin(th)/7.0 << "*t, ";
 }
 
 class Colisionador {
