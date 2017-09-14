@@ -64,7 +64,7 @@ void Cuerpo::AgregueTorque(double tau0) {
 }
 
 void Cuerpo::Mueva_r(double dt, double Constante) {
-  r+=v*(Constante*dt); tau+=w*(Constante*dt);
+  r+=v*(Constante*dt); th+=w*(Constante*dt);
 }
 
 void Cuerpo::Mueva_v(double dt, double Constante) {
