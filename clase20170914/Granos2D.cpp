@@ -25,15 +25,16 @@ class Colisionador;
 class Cuerpo {
  private:
   vector3D r,v,F;
-  double m,R,th,w;
+  double m,R,th,w,I,tau;
  public:
   friend class Colisionador;
   void Inicio(double  x0, double y0, double z0,
 	      double Vx0, double Vy0, double Vz0,
 	      double th0, double w0,
 	      double m0,double R0);
-  void BorreFuerza(void);
+  void BorreFuerzaYTorque(void);
   void AgregueFuerza(vector3D F0);
+  void AgregueTorque(double tau0);
   void Mueva_r(double dt, double Constante);
   void Mueva_v(double dt, double Constante);
   void Dibujese(void);
@@ -44,31 +45,35 @@ class Cuerpo {
 void Cuerpo::Inicio(double x0,double y0,double z0,
 		    double Vx0,double Vy0,double Vz0,
 		    double th0, double w0,
-		    double m0,double R0) {
+		    double m0, double R0) {
   r.cargue(x0,y0,z0);
   v.cargue(Vx0,Vy0,Vz0);
-  m = m0; R = R0; th = th0; w = w0;
+  m = m0; R = R0; th = th0; w = w0; I = 2.0/5*m*R*R;
 }
 
-void Cuerpo::BorreFuerza(void) {
-  F.cargue(0.0,0.0,0.0);
+void Cuerpo::BorreFuerzaYTorque(void) {
+  F.cargue(0.0,0.0,0.0); tau = 0.0;
 }
 				  
 void Cuerpo::AgregueFuerza(vector3D F0) {
   F+=F0;
 }
 
+void Cuerpo::AgregueTorque(double tau0) {
+  tau+=tau0;
+}
+
 void Cuerpo::Mueva_r(double dt, double Constante) {
-  r+=v*(Constante*dt);
+  r+=v*(Constante*dt); tau+=w*(Constante*dt);
 }
 
 void Cuerpo::Mueva_v(double dt, double Constante) {
-  v+=F*(Constante*dt/m);
+  v+=F*(Constante*dt/m);  w+=tau*(Constante*dt/I);
 }
 
 void Cuerpo::Dibujese(void) {
   cout << ", " << r.x() << "+"<< R << "*cos(t)," << r.y() << "+" << R << "*sin(t), "
-       << r.x() << "+" << R*cos(th)/7.0 << "*t, " << r.y() << "+" << R*sin(th)/7.0 << "*t, ";
+       << r.x() << "+" << R*cos(th)/7.0 << "*t, " << r.y() << "+" << R*sin(th)/7.0 << "*t ";
 }
 
 class Colisionador {
@@ -83,7 +88,7 @@ void Colisionador::CalculeTodasLasFuerzas(Cuerpo* cuerpos) {
   int i,j;
   vector3D g_vector; g_vector.cargue(0,-g,0);
   for(i=0;i<N;i++)
-    cuerpos[i].BorreFuerza();
+    cuerpos[i].BorreFuerzaYTorque();
   for(i=0;i<N;i++)
     cuerpos[i].AgregueFuerza(cuerpos[i].m*g_vector);
   for(i=0;i<N;i++)
@@ -160,7 +165,7 @@ int main(void) {
   Colisionador newton;
   Crandom ran64(1); double theta;
 
-  double m0=1, R0=6, v=10;
+  double m0=1, R0=6, v=10, w = 0.5;
   double Rpared=10000, Mpared=1000*m0 ;
 
   double T=Lx/v, tmax=5*T;
@@ -180,10 +185,10 @@ int main(void) {
   for (i=0; i<N; i++) {
     row = (int)i/(int)Nx; col = i-row*Nx;
     theta = 2*M_PI*ran64.r();
-    granos[i].Inicio((1+col)*Lx/(Nx+2),(1+row)*Ly/(Ny+2),0.0,
-		     v*cos(theta),v*sin(theta),0.0,
-		     0, 0,
-		     m0, R0 );
+    granos[i].Inicio( (1+col)*Lx/(Nx+2),(1+row)*Ly/(Ny+2),0.0,
+		      v*cos(theta),v*sin(theta),0.0,
+		      0,   w,
+		      m0, R0 );
   }
 
   for (t=tdibujo=0;t<tmax;t+=dt,tdibujo+=dt) {
