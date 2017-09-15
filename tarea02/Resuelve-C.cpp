@@ -2,7 +2,7 @@
   Se toma la masa de Jupiter como 1newKg y la del sol como 1047newKg
   La distancia entre ambos es 1000 newm. 
 
-  El ejercicio del punto 1 (Resuelve-A.cpp) es precesado para que la salida sea relativa a un marco en el sol que rota mirando a jupiter.
+  Del ejercicio del punto 2 (Resuelve-B.cpp) se coloca ahora un planeta troyano en la posicion L4 de adelanto 60grados a Jupiter.
  */
 
 #include <iostream>
@@ -13,7 +13,7 @@
 using namespace std;
 
 const double G = 1.0;
-const int N = 2;
+const int N = 3;
 
 const double Zeta = +0.1786178958448091;
 const double Lambda = -0.2123418310626054;
@@ -101,7 +101,7 @@ void Colisionador::CalculeLaFuerzaEntre(Cuerpo& cuerpo1,
 
 void InicieAnimacion(void) {
   cout << "set terminal pngcairo" << endl; 
-  cout << "set output '20OrbitasRotadoJupiterYSol.png'" << endl; 
+  cout << "set output '20OrbitasTroyano.png'" << endl; 
   cout << "unset key" << endl;
   cout << "set xrange [-1200:1200]" << endl;
   cout << "set yrange [-1200:1200]" << endl;
@@ -126,8 +126,8 @@ int main(void) {
   int i;
   Colisionador newton;
 
-  double m0=1047, m1=1, r=1000;
-  double R0=100, R1=10;
+  double m0=1047, m1=1, m2=0.005, r=1000;
+  double R0=100, R1=30, R2=10;
 
   double M = m0+m1;
   double x0 = -m1/M*r, x1 = x0+r;
@@ -142,9 +142,13 @@ int main(void) {
   //                ( x0, y0, z0,Vx0,Vy0,Vz0, m0, R0 )
   planetas[0].Inicio( x0,0.0,0.0,0.0,vy0,0.0, m0, R0 );
   planetas[1].Inicio( x1,0.0,0.0,0.0,vy1,0.0, m1, R1 );
-   
+  planetas[2].Inicio( r*cos(M_PI/3)+x0, 
+		      r*sin(M_PI/3), 0.0,
+		      -vy1*sin(M_PI/3),
+		      vy1*cos(M_PI/3)-vy0, 0.0, m2, R2 ); 
+
   cout << " set grid back ls 12 " << endl
-       << " set title '20 Orbitas relativas a Jupiter mirando al Sol' " << endl
+       << " set title '20 Orbitas Troyano en equilibrio' " << endl
        << " set xlabel 'T = " << T
        << "[newS], dt = " << dt << "' " << endl;
   InicioCuadro();
@@ -158,6 +162,10 @@ int main(void) {
 				     atan2( planetas[1].Gety()-planetas[0].Gety(),
 					    planetas[1].Getx()-planetas[0].Getx()));
       cout << " lc rgb 'blue' ";
+      planetas[2].DibujeseRelativaA( planetas[0].Getx(), planetas[0].Gety(),
+				     atan2( planetas[1].Gety()-planetas[0].Gety(),
+					    planetas[1].Getx()-planetas[0].Getx()));
+      cout << " lc rgb 'green' ";
       tdibujo = 0;
     }
     // cout << planetas[0].Getx() << " " << planetas[0].Gety()
