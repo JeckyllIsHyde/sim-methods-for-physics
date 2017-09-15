@@ -95,7 +95,7 @@ void Colisionador::CalculeLaFuerzaEntre(Cuerpo& cuerpo1,
 
 void InicieAnimacion(void) {
   cout << "set terminal pngcairo" << endl; 
-  cout << "set output 'SolYJupiter.png'" << endl; 
+  cout << "set output '20OrbitasJupiterYSol.png'" << endl; 
   cout << "unset key" << endl;
   cout << "set xrange [-1200:1200]" << endl;
   cout << "set yrange [-1200:1200]" << endl;
@@ -126,11 +126,11 @@ int main(void) {
   double M = m0+m1;
   double x0 = -m1/M*r, x1 = x0+r;
   
-  double a = r, omega=sqrt(G*M/(a*a*a)),
+  double omega=sqrt(G*M/(r*r*r)),
     vy0=omega*x0, vy1=1.0*omega*x1,
     T=2*M_PI/omega, tmax=20.*T;
 
-  dt = 20*T/(150); // M*T = n*dt
+  dt = 20*T/(501); // M*T = n*dt
   
   InicieAnimacion(); Ndibujos=500;
   //                ( x0, y0, z0,Vx0,Vy0,Vz0, m0, R0 )
@@ -138,8 +138,9 @@ int main(void) {
   planetas[1].Inicio( x1,0.0,0.0,0.0,vy1,0.0, m1, R1 );
    
   cout << " set grid back ls 12 " << endl
-       << " set title 'T = " << T
-       << "[newS] , dt = " << dt << "' " << endl;
+       << " set title '20 Orbitas de Jupiter y Sol' " << endl
+       << " set xlabel 'T = " << T
+       << "[newS], dt = " << dt << "' " << endl;
   InicioCuadro();
   for (t=tdibujo=0;t<tmax;t+=dt,tdibujo+=dt) {
     if (tdibujo>tmax/Ndibujos) {
