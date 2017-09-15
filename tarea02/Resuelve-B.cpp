@@ -1,6 +1,8 @@
 /*
   Se toma la masa de Jupiter como 1newKg y la del sol como 1047newKg
   La distancia entre ambos es 1000 newm. 
+
+  El ejercicio del punto 1 (Resuelve-A.cpp) es precesado para que la salida sea relativa a un marco en el sol que rota mirando a jupiter.
  */
 
 #include <iostream>
@@ -99,7 +101,7 @@ void Colisionador::CalculeLaFuerzaEntre(Cuerpo& cuerpo1,
 
 void InicieAnimacion(void) {
   cout << "set terminal pngcairo" << endl; 
-  cout << "set output '20OrbitasJupiterYSol.png'" << endl; 
+  cout << "set output '20OrbitasRotadoJupiterYSol.png'" << endl; 
   cout << "unset key" << endl;
   cout << "set xrange [-1200:1200]" << endl;
   cout << "set yrange [-1200:1200]" << endl;
@@ -142,17 +144,19 @@ int main(void) {
   planetas[1].Inicio( x1,0.0,0.0,0.0,vy1,0.0, m1, R1 );
    
   cout << " set grid back ls 12 " << endl
-       << " set title '20 Orbitas de Jupiter y Sol' " << endl
+       << " set title '20 Orbitas relativas a Jupiter mirando al Sol' " << endl
        << " set xlabel 'T = " << T
        << "[newS], dt = " << dt << "' " << endl;
   InicioCuadro();
   for (t=tdibujo=0;t<tmax;t+=dt,tdibujo+=dt) {
     if (tdibujo>tmax/Ndibujos) {
-      planetas[0].DibujeseRelativaA( (m0*planetas[0].Getx()+m1*planetas[1].Getx())/M, 
-				     (m0*planetas[0].Gety()+m0*planetas[0].Gety())/M );
+      planetas[0].DibujeseRelativaA( planetas[0].Getx(), planetas[0].Gety(),
+				     atan2( planetas[1].Gety()-planetas[0].Gety(),
+					    planetas[1].Getx()-planetas[0].Getx()));
       cout << " lc rgb 'red' ";
-      planetas[1].DibujeseRelativaA( (m0*planetas[0].Getx()+m1*planetas[1].Getx())/M, 
-				     (m0*planetas[0].Gety()+m0*planetas[0].Gety())/M );
+      planetas[1].DibujeseRelativaA( planetas[0].Getx(), planetas[0].Gety(),
+				     atan2( planetas[1].Gety()-planetas[0].Gety(),
+					    planetas[1].Getx()-planetas[0].Getx()));
       cout << " lc rgb 'blue' ";
       tdibujo = 0;
     }
