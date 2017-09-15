@@ -33,7 +33,7 @@ class Cuerpo {
   void AgregueFuerza(vector3D F0);
   void Mueva_r(double dt, double Constante);
   void Mueva_v(double dt, double Constante);
-  void DibujeseRelativaA(double x0, double y0);
+  void DibujeseRelativaA(double x0, double y0, double th0);
   double Getx(void) {return r.x();};
   double Gety(void) {return r.y();};
 };
@@ -62,8 +62,12 @@ void Cuerpo::Mueva_v(double dt, double Constante) {
   v+=F*(Constante*dt/m);
 }
 
-void Cuerpo::DibujeseRelativaA(double x0, double y0) {
-  cout << ", " << r.x()-x0 << "+"<< R << "*cos(t)," << r.y()-y0 << "+" << R << "*sin(t)";
+void Cuerpo::DibujeseRelativaA(double x0, double y0, double th0) {
+  double dx = r.x()-x0,
+    dy = r.y()-y0,
+    xrot =  dx*cos(th0)+dy*sin(th0),
+    yrot = -dx*sin(th0)+dy*cos(th0);
+  cout << ", " << xrot << "+"<< R << "*cos(t)," << yrot << "+" << R << "*sin(t)";
 }
 
 class Colisionador {
