@@ -1,0 +1,51 @@
+\documentclass[journal,letterpaper,twoside,twocolumn]{IEEEtran}
+
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{cite}
+
+\title{Propuesta 1. Locomoción Humanoide:\\Contacto, Impacto y Dinámica Centroidal}
+\author{Jaime Andrés~Castillo-León}
+\markboth{Primera propuesta: Métodos de Simulación en Física}{Castillo-León: Locomoción Humanoide}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+  En este documento se propone trabajar con dinámica multicuerpo, aplicada a una configuración humanoide utilizando el formalismo de los screws para describir la dínamica del centro de masa y el momento angular del sistema. La interacción con el entorno será llevada a cabo por el impacto y colisión de los pies, cuyo modelo será propuesto a partir de esferas. Además se propone una distribución de lo que sería el articulo final.
+\end{abstract}
+\begin{IEEEkeywords}
+  Locomoción humanoide, Modelos de Impacto y Contacto, Dinamica Centroidal, Screws
+\end{IEEEkeywords}
+
+\section{Introducción}
+\label{sec:intro}
+\IEEEPARstart{P}{arte} de los problemas actuales de la simulación de la locomóción humanoide y sus aplicaciones a la biomecánica y las neurociencias, radíca en que los modelos de contacto y fricción actuales difieren bastante de la realidad. Además la forma adecuada en que se describe y analiza la dinámica de la estructura mecánica ha sido un reto para generar simulaciones en tiempo real. Se ha probado diferentes formalismos: desde la mecánica clásica de las ecuaciónes de Newton-Euler, la mecánica analitica de Euler-Lagrange, los sistemas multipuertos de los Hamitonianos utilizando Bond Graphs o las ecuaciones de Kane partiendo del concepto de trabajo virtual. 
+
+Generalmente cuando se utiliza el formalismo de Newton-Euler, para resolver la mecánica de cadenas cinemáticas tipo árbol, como las que se presentan en el cuerpo de los animales o en general de los seres vivos. Se debe plantear por cada cuerpo o eslabón que constituye a la cadena, seis ecuaciones de movimiento y luego se debe colocar restricciónes algebraicas para representar la física de las articulaciones, que finalmente representa la topología del mecanismo. Un motor físico, empleado para video juegos, ODE, soluciona las ecuaciones de movimiento, colision y friccion de esta forma, generando demasiadas ecuaciones. Se ha demostrado en varios artículos mediante benchmarks que este enfoque no es el adecuado para el análisis la locomoción de seres vivos.
+
+Las ecuaciones de Euler-Lagrange producen un sistema de ecuaciones reducido, representado por variables generalizadas. A diferencia de Newton-Euler, el sistema a resolver es pequeño, lo cual para la síntesis de controladores es ventajoso a nivel computacional, no obstante este formalismo basado en el Lagrangianos del sistema, no permite obtener de forma directa las fuerzas de interacción entre los cuerpos, las cuales son un requerimiento para el diseño mecánico del sistema. La topología de la cadena queda absorbida en el planteamiento del problema. Básicamente estos sistemas requiere de un motor algebraico diferencial para su solución, este motor se ejecuta como un preproceso y si la topología cambia se debe repetir el proceso, situacion que no ocurre por Newton-Euler.
+
+En el caso de los puertos Hamiltonianos, por ejemplo los Bond Graphs, representan un método gráfico para describir el flujo de energía del sistema, mediante dos variables: flujo y esfuerzo, además de la causalidad del sistema. La causalidad en este formalismo es utilizada para la implementación computacional automática de cómo deben ser planteadas y resueltas la ecuaciones de movimiento. Una ventaja de los Bond Graphs es la aprarente sencilles con la que se puede acomplar diferentes medios físicos con el uso de los puertos, de allí que estos métodos se utilicen para problemas que involucran varios dominios físicos, como transferencia de calor, de masa, electromagnetismo y mecánica.
+
+En este trabajo se propone utilizar un formalismo que puede moverse entre los tres anteriormente mencionados. Las ecuaciones de Lagrange son obtenidas a partir de algoritmos recursivos de Newton-Euler que a su vez son implementados utlizando el algebra de los Screws. Del sistema descrito en lagrangianos es posible obtener su representación en hamiltonianos. Los Screws permiten plantear las ecuaciones de movimiento de una forma más compacta y general, en donde se unen la translación y la rotación en una unica entidad matematica denomiada Screw. La notación y construcción que se utilizará es la propuesta por Roy Feathrestone, en donde los Screws son definidos \emph{Vectores Espaciales} o \emph{6D-vectors}, con su respectiva algebra. Basicamente se definen dos tipos de Espacios Vectoriales: movimiento \emph{(Twist)} y fuerza \emph{(Wrenches)}.
+
+Una vez son obtenidas las ecuaciones de movimiento por cualquier método, se debe resolver las ecuaciones diferenciales. Estas ecuaciones requieren que el solucionador tenga dos propiedades: (1) control de tamaño de paso adaptativo, para controlar el error y (2) resolver ecuaciones numéricamente rígidas (\emph{stiff}). Para esto las librerias Odeint de Boost desarrolladas bajo el paradigma de metaprogramación presente C++ serán utilizadas.
+
+\section{Simulación Multicuerpo}
+\label{sec:simula}
+
+\section{Modelos de Impacto y Contacto}
+\label{sec:impYcon}
+
+\section{Dinámica Centroidal}
+\label{sec:dinCentr}
+
+\section{Generación de Trayectorias}
+\label{sec:genTray}
+
+\section{Discusión y Conclusiones}
+\label{sec:conclu}
+
+
+\end{document}
