@@ -19,7 +19,7 @@ class Cuerpo {
 };
 
 void Cuerpo::Inicio(double x0,double y0,double Vx0,double Vy0,double m0,double R0) {
-  x = x0; y = y0; Vx = Vx0; Vy = Vy0; m = m0; R0 = R0;
+  x = x0; y = y0; Vx = Vx0; Vy = Vy0; m = m0; R = R0;
 }
 
 void Cuerpo::CalculeFuerza(void) {
