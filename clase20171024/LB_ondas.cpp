@@ -27,7 +27,7 @@ const double UmUtau=1-Utau;
 
 class LatticeBoltzmann {
 private:
-  int w[Q];
+  double w[Q];
   int v[2][Q];    // V[alpha][i] con alpha=0 como x y alpha=y como y
   double f[Lx][Ly][Q], fnew[Lx][Ly][Q]; // f[ix][i]: la probabilidad de q se encuentre una bolita en una posicion
 public:
@@ -37,9 +37,9 @@ public:
   double Jy(int ix, int iy);
   double feq(int i, double rho0, double Jx0, double Jy0);
   void inicie(double rho0, double Jx0, double Jy0);
-  void imponerFrontera(double& rho0,
-		       double& Jx0, double& Jy0,
-		       int t, int ix, int iy);
+  void imponerFrontera(int ix, int iy,
+		       double& rho0, double& Jx0, double& Jy0,
+		       int t);
   void colisione(int t);
   void adveccione(void);
   void imprimase(const char* nombreArchivo, int t);
@@ -49,8 +49,8 @@ LatticeBoltzmann::LatticeBoltzmann(void) {
   w[0] = W0;
   w[1] = w[2] = w[3] = w[4] = W0/2;
 
-  v[0][0] = 1;
-  v[1][0] = 1;
+  v[0][0] = 0;
+  v[1][0] = 0;
 
   v[0][1] = 1;  v[0][2] = 0;  v[0][3] = -1;  v[0][4] =  0;
   v[1][1] = 0;  v[1][2] = 1;  v[1][3] =  0;  v[1][4] = -1;
